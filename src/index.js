@@ -1,3 +1,5 @@
+import "./static/reset.css";
+import "./static/style.css";
 import task from "./task.js";
 import project from "./project.js";
 
