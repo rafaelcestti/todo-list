@@ -39,23 +39,42 @@ class task {
         this.status = !this.status;
     }
 }
+*/
 
 // View
 class todoView {
+    // Creates our basic HTML elements, both dialogs for creating projects/tasks, the nav, and the main section
     constructor() {
-        this.main = document.querySelector()
+        this.body = document.querySelector("body");
+        this.createProjectDialog();
+    }
+
+    createProjectDialog() {
+        const newDialog = document.createElement("dialog");
+        const newForm = document.createElement("form");
+
+        // Create title label & input
+        const titleLabel = document.createElement("label");
+        titleLabel.textContent = "Title";
+
+        const titleInput = document.createElement("input");
+        titleInput.setAttribute("type", "text");
+
+        titleLabel.appendChild(titleInput);
+
+        // Create submit button
+        const submitButton = document.createElement("button");
+        submitButton.textContent = "Submit";
+        submitButton.setAttribute("type", "button");
+
+        // Append title label & submit button to newForm
+        newForm.appendChild(titleLabel);
+        newForm.appendChild(submitButton);
+
+        // Append our form to our dialog
+        newDialog.appendChild(newForm);
+
+        // Append our dialog to the body
+        this.body.appendChild(newDialog);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-*/
