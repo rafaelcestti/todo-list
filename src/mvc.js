@@ -52,7 +52,9 @@ class todoView {
     #createProjectDialog() {
         const newDialog = document.createElement("dialog");
         newDialog.setAttribute("class", "projectDialog");
+
         const newForm = document.createElement("form");
+        newForm.setAttribute("class", "projectForm");
 
         // Create title label & input
         const titleLabel = document.createElement("label");
@@ -83,7 +85,9 @@ class todoView {
     #createTaskDialog() {
         const newDialog = document.createElement("dialog");
         newDialog.setAttribute("class", "taskDialog");
+
         const newForm = document.createElement("form");
+        newForm.setAttribute("class", "taskForm");
 
         // Create title label & input
         const titleLabel = document.createElement("label");
@@ -178,6 +182,7 @@ class todoView {
         // Create "New Project" text
         const newH2 = document.createElement("h2");
         newH2.textContent = "New Project";
+        newH2.setAttribute("class", "newProjectButton");
 
         // Append both to our nav
         newNav.appendChild(newH1);
@@ -245,28 +250,70 @@ class todoView {
         // Append new tasks to respective tasks container
         tasksContainer.appendChild(newTask);
     }
+
+    showProjectDialog() {
+        const projectDialog = document.querySelector(".projectDialog");
+        projectDialog.showModal();
+    }
+
+    resetProjectDialog() {
+        const projectForm = document.querySelector(".projectForm");
+        projectForm.reset();
+    }
+
+    showTaskDialog() {
+        const taskDialog = document.querySelector(".taskDialog");
+        taskDialog.showModal();
+    }
+
+    resetTaskDialog() {
+        const taskForm = document.querySelector(".taskForm");
+        taskForm.reset();
+    }
 }
 
 /*
 // Controller
-class todoController() {
-    constructor() {
-        // Project ID counter
-        // Task ID counter
+class todoController {
+    constructor(project, task, view) {
+        // Project/Task ID counter
+        let elementCounter = 0;
+        this.projects = [];
+        this.projectClass = project;
+        this.taskClass = task;
+        this.view = view;
+    }
+
+    projectEventListeners() {
         // Sets event listener for new project button
-        // Sets event listener for new task button
+        const newProjectButton = document.querySelector(".newProjectButton");
+        newProjectButton.addEventListener("click", () => {
+            view.showProjectDialog();
+        });
+
+        const submitProjectButton = document.querySelector(".projectSubmitButton");
+        submitProjectButton.addEventListener("click", () => {
+            this.newProject();
+            this.view.resetProjectDialog();
+        });
     }
 
     newProject() {
+        // Grab title from project dialog
+        
         // Creates a new project on backend with a specific id
         // Creates a new project on frontend with a specific id
+        // Add event listener inside project's add task button to run newTask() with new project's id
+        // Increment ID counter
     }
 
     newTask() {
-        // Creates a new task with a specific id inside a project in backend 
-        // Creates a new task with a specific id inside a project in frontend 
+        // Creates a new task with a specific id inside a project in backend
+        // Creates a new task with a specific id inside a project in frontend
     }
 }
-*/
+ */
 
-export { project, task, todoView };
+export { project, task, todoView, todoController };
+
+// TODO: Add specific ID's to all our form inputs, then fill out the rest of the pseudocode inside the controller
