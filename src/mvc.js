@@ -46,6 +46,7 @@ class todoView {
         this.#createTaskDialog();
         this.#createNav();
         this.#createMain();
+        this.main = document.querySelector("main"); // Will be used when creating new projects/tasks
     }
 
     #createProjectDialog() {
@@ -192,17 +193,45 @@ class todoView {
         this.body.appendChild(newMain);
     }
 
-    createProject(givenID) {
+    createProject(projectID, projectTitle) {
         // Creates a project and appends it to main
+        const newProject = document.createElement("div");
+        newProject.setAttribute("class", "project");
+
+        // Create project title
+        const newProjectTitle = document.createElement("h1");
+        newProjectTitle.textContent = projectTitle;
+        newProjectTitle.setAttribute("class", "title");
+
+        // Create "Add Task" button
+        const addTaskButton = document.createElement("button");
+        addTaskButton.textContent = "Add Task";
+
+        // Append button to the title's h1 container
+        newProjectTitle.appendChild(addTaskButton);
+
+        // Create tasks container
+        const tasksContainer = document.createElement("div");
+        tasksContainer.setAttribute("class", "tasks");
+
+        tasksContainer.setAttribute("id", projectID); // Set project ID to the tasks container as this is where we will append the tasks for the project
+
+        // Append project title and tasks container to project div
+        newProject.appendChild(newProjectTitle);
+        newProject.appendChild(tasksContainer);
+
+        // Append project to main
+        this.main.appendChild(newProject);
     }
 
-    createTask(projectID, givenID) {
+    createTask(projectID, taskID) {
         // Creates a task and appends it to a project by ID
     }
 }
 
+/*
 // Controller
-class Controller() {
+class todoController() {
     constructor() {
         // Project ID counter
         // Task ID counter
@@ -220,5 +249,6 @@ class Controller() {
         // Creates a new task with a specific id inside a project in frontend 
     }
 }
+*/
 
 export { project, task, todoView };
