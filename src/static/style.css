@@ -69,6 +69,11 @@ main {
     padding: 1rem;
 }
 
+.project > h1 {
+    display: flex;
+    justify-content: space-between;
+}
+
 /* Tasks Section Styling */
 
 .tasks {
