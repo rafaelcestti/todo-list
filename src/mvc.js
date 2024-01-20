@@ -48,6 +48,7 @@ export default class todoView {
         this.body = document.querySelector("body");
         this.createProjectDialog();
         this.createTaskDialog();
+        this.createNav();
     }
 
     createProjectDialog() {
@@ -167,5 +168,24 @@ export default class todoView {
 
         // Append our dialog to the body
         this.body.appendChild(newDialog);
+    }
+
+    createNav() {
+        const newNav = document.createElement("nav");
+
+        // Create "Todo List" text
+        const newH1 = document.createElement("h1");
+        newH1.textContent = "Todo List";
+
+        // Create "New Project" text
+        const newH2 = document.createElement("h2");
+        newH2.textContent = "New Project";
+
+        // Append both to our nav
+        newNav.appendChild(newH1);
+        newNav.appendChild(newH2);
+
+        // Append nav to the body
+        this.body.appendChild(newNav);
     }
 }
