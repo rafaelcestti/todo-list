@@ -85,14 +85,18 @@ main {
     grid-template-columns: 1fr 1fr 50px;
 }
 
-/* Dialog Styling */
+/* Dialog & Form Styling */
 dialog[open] {
     border: 1px black solid;
-    display: flex;
-    flex-direction: column;
 }
 
-dialog > label {
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+form > label {
     display: grid;
     grid-template-columns: 1fr 1fr;
 }
