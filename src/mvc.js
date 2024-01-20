@@ -193,14 +193,13 @@ class todoView {
         this.body.appendChild(newMain);
     }
 
-    createProject(projectID, projectTitle) {
-        // Creates a project and appends it to main
+    createProject(givenProject) {
         const newProject = document.createElement("div");
         newProject.setAttribute("class", "project");
 
         // Create project title
         const newProjectTitle = document.createElement("h1");
-        newProjectTitle.textContent = projectTitle;
+        newProjectTitle.textContent = `${givenProject.title}`;
         newProjectTitle.setAttribute("class", "title");
 
         // Create "Add Task" button
@@ -214,7 +213,7 @@ class todoView {
         const tasksContainer = document.createElement("div");
         tasksContainer.setAttribute("class", "tasks");
 
-        tasksContainer.setAttribute("id", projectID); // Set project ID to the tasks container as this is where we will append the tasks for the project
+        tasksContainer.setAttribute("id", `${givenProject.id}`); // Set project ID to the tasks container as this is where we will append the tasks for the project
 
         // Append project title and tasks container to project div
         newProject.appendChild(newProjectTitle);
@@ -224,8 +223,26 @@ class todoView {
         this.main.appendChild(newProject);
     }
 
-    createTask(projectID, taskID) {
-        // Creates a task and appends it to a project by ID
+    createTask(projectID, givenTask) {
+        const tasksContainer = document.getElementById(`${projectID}`);
+        const newTask = document.createElement("div");
+        newTask.setAttribute("id", `${givenTask.id}`);
+        newTask.setAttribute("class", "task");
+
+        // Create task title
+        const newTaskTitle = document.createElement("h1");
+        newTaskTitle.textContent = `${givenTask.title}`;
+
+        // Create task due date
+        const newTaskDueDate = document.createElement("h1");
+        newTaskDueDate.textContent = `${givenTask.dueDate}`;
+
+        // Append title and due date to our new task
+        newTask.appendChild(newTaskTitle);
+        newTask.appendChild(newTaskDueDate);
+
+        // Append new tasks to respective tasks container
+        tasksContainer.appendChild(newTask);
     }
 }
 
