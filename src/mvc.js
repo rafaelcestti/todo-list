@@ -205,6 +205,7 @@ class todoView {
         // Create "Add Task" button
         const addTaskButton = document.createElement("button");
         addTaskButton.textContent = "Add Task";
+        addTaskButton.setAttribute("id", `addTaskButton${givenProject.id}`); // Set project id to the add task button for our event listener
 
         // Append button to the title's h1 container
         newProjectTitle.appendChild(addTaskButton);
@@ -213,7 +214,7 @@ class todoView {
         const tasksContainer = document.createElement("div");
         tasksContainer.setAttribute("class", "tasks");
 
-        tasksContainer.setAttribute("id", `${givenProject.id}`); // Set project ID to the tasks container as this is where we will append the tasks for the project
+        tasksContainer.setAttribute("id", `tasksContainer${givenProject.id}`); // Set project ID to the tasks container as this is where we will append the tasks for the project
 
         // Append project title and tasks container to project div
         newProject.appendChild(newProjectTitle);
@@ -224,7 +225,7 @@ class todoView {
     }
 
     createTask(projectID, givenTask) {
-        const tasksContainer = document.getElementById(`${projectID}`);
+        const tasksContainer = document.getElementById(`tasksContainer${projectID}`);
         const newTask = document.createElement("div");
         newTask.setAttribute("id", `${givenTask.id}`);
         newTask.setAttribute("class", "task");
