@@ -191,4 +191,34 @@ class todoView {
 
         this.body.appendChild(newMain);
     }
+
+    createProject(givenID) {
+        // Creates a project and appends it to main
+    }
+
+    createTask(projectID, givenID) {
+        // Creates a task and appends it to a project by ID
+    }
 }
+
+// Controller
+class Controller() {
+    constructor() {
+        // Project ID counter
+        // Task ID counter
+        // Sets event listener for new project button
+        // Sets event listener for new task button
+    }
+
+    newProject() {
+        // Creates a new project on backend with a specific id
+        // Creates a new project on frontend with a specific id
+    }
+
+    newTask() {
+        // Creates a new task with a specific id inside a project in backend 
+        // Creates a new task with a specific id inside a project in frontend 
+    }
+}
+
+export { project, task, todoView };
