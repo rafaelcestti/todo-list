@@ -46,12 +46,12 @@ export default class todoView {
     // Creates our basic HTML elements, both dialogs for creating projects/tasks, the nav, and the main section
     constructor() {
         this.body = document.querySelector("body");
-        this.createProjectDialog();
-        this.createTaskDialog();
-        this.createNav();
+        this.#createProjectDialog();
+        this.#createTaskDialog();
+        this.#createNav();
     }
 
-    createProjectDialog() {
+    #createProjectDialog() {
         const newDialog = document.createElement("dialog");
         newDialog.setAttribute("class", "projectDialog");
         const newForm = document.createElement("form");
@@ -82,7 +82,7 @@ export default class todoView {
         this.body.appendChild(newDialog);
     }
 
-    createTaskDialog() {
+    #createTaskDialog() {
         const newDialog = document.createElement("dialog");
         newDialog.setAttribute("class", "taskDialog");
         const newForm = document.createElement("form");
@@ -170,7 +170,7 @@ export default class todoView {
         this.body.appendChild(newDialog);
     }
 
-    createNav() {
+    #createNav() {
         const newNav = document.createElement("nav");
 
         // Create "Todo List" text
