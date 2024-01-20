@@ -1,17 +1,13 @@
-/*
 // Models
 class project {
     constructor(id, title) {
         this.id = id;
         this.title = title;
-        this.tasksID = 0;
         this.tasks = [];
     }
 
-    addTask(givenTitle, givenDescription, givenDueDate, givenPriority) {
-        const newTask = new task(this.tasksID, givenTitle, givenDescription, givenDueDate, givenPriority);
+    addTask(givenTask) {
         this.tasks.push(newTask);
-        this.tasksID += 1;
     }
 
     removeTask(givenTaskID) {
@@ -24,6 +20,7 @@ class project {
             }
         }
     }
+}
 
 class task {
     constructor(id, title, description, dueDate, priority) {
@@ -39,16 +36,16 @@ class task {
         this.status = !this.status;
     }
 }
-*/
 
 // View
-export default class todoView {
+class todoView {
     // Creates our basic HTML elements, both dialogs for creating projects/tasks, the nav, and the main section
     constructor() {
         this.body = document.querySelector("body");
         this.#createProjectDialog();
         this.#createTaskDialog();
         this.#createNav();
+        this.#createMain();
     }
 
     #createProjectDialog() {
@@ -187,5 +184,11 @@ export default class todoView {
 
         // Append nav to the body
         this.body.appendChild(newNav);
+    }
+
+    #createMain() {
+        const newMain = document.createElement("main");
+
+        this.body.appendChild(newMain);
     }
 }
