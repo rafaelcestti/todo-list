@@ -263,7 +263,9 @@ class todoView {
     }
 
     resetProjectDialog() {
+        const projectDialog = document.querySelector(".projectDialog");
         const projectForm = document.querySelector(".projectForm");
+        projectDialog.close();
         projectForm.reset();
     }
 
@@ -273,27 +275,27 @@ class todoView {
     }
 
     resetTaskDialog() {
+        const taskDialog = document.querySelector(".taskDialog");
         const taskForm = document.querySelector(".taskForm");
+        taskDialog.close();
         taskForm.reset();
     }
 }
 
 // Controller
 class todoController {
-    constructor(project, task, view) {
-        // Project/Task ID counter
-        let elementCounter = 0;
+    constructor(view) {
+        this.elementCounter = 0; // Project/Task ID counter
         this.projects = [];
-        this.projectClass = project;
-        this.taskClass = task;
         this.view = view;
+        this.projectEventListeners();
     }
 
     projectEventListeners() {
         // Sets event listener for new project button
         const newProjectButton = document.querySelector(".newProjectButton");
         newProjectButton.addEventListener("click", () => {
-            view.showProjectDialog();
+            this.view.showProjectDialog();
         });
 
         const submitProjectButton = document.querySelector(".projectSubmitButton");
@@ -305,10 +307,18 @@ class todoController {
 
     newProject() {
         // Grab title from project dialog
+        const projectTitle = document.getElementById("projectTitle").value;
         // Creates a new project on backend with a specific id
+        const newProject = new project(this.elementCounter, projectTitle);
+        // Add project to our projects array
+        this.projects.push(newProject);
         // Creates a new project on frontend with a specific id
+        this.view.createProject(newProject);
         // Add event listener inside project's add task button to run newTask() with new project's id
+        const addTaskToProject = document.getElementById(`addTaskButton${newProject.id}`);
+        addTaskToProject.addEventListener("click", () => newTask(newProject.id));
         // Increment ID counter
+        this.elementCounter += 1;
     }
 
     newTask() {
@@ -319,6 +329,6 @@ class todoController {
 /*
  */
 
-export { project, task, todoView, todoController };
+export { todoView, todoController };
 
 // TODO: Add specific ID's to all our form inputs, then fill out the rest of the pseudocode inside the controller
