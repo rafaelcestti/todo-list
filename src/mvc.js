@@ -62,6 +62,7 @@ class todoView {
 
         const titleInput = document.createElement("input");
         titleInput.setAttribute("type", "text");
+        titleInput.setAttribute("id", "projectTitle");
 
         titleLabel.appendChild(titleInput);
 
@@ -95,6 +96,7 @@ class todoView {
 
         const titleInput = document.createElement("input");
         titleInput.setAttribute("type", "text");
+        titleInput.setAttribute("id", "taskTitle");
 
         titleLabel.appendChild(titleInput);
 
@@ -104,6 +106,7 @@ class todoView {
 
         const descriptionInput = document.createElement("input");
         descriptionInput.setAttribute("type", "text");
+        descriptionInput.setAttribute("id", "taskDescription");
 
         descriptionLabel.appendChild(descriptionInput);
 
@@ -113,6 +116,7 @@ class todoView {
 
         const dateInput = document.createElement("input");
         dateInput.setAttribute("type", "date");
+        dateInput.setAttribute("id", "taskDate");
 
         dateLabel.appendChild(dateInput);
 
@@ -122,6 +126,7 @@ class todoView {
 
         const prioritySelect = document.createElement("select");
         prioritySelect.setAttribute("class", "prioritySelect");
+        prioritySelect.setAttribute("id", "taskPriority");
 
         const priorityOptionOne = document.createElement("option");
         priorityOptionOne.textContent = "!";
@@ -148,6 +153,7 @@ class todoView {
 
         const completedInput = document.createElement("input");
         completedInput.setAttribute("type", "checkbox");
+        completedInput.setAttribute("id", "taskStatus");
 
         completedLabel.appendChild(completedInput);
 
@@ -272,7 +278,6 @@ class todoView {
     }
 }
 
-/*
 // Controller
 class todoController {
     constructor(project, task, view) {
@@ -300,7 +305,6 @@ class todoController {
 
     newProject() {
         // Grab title from project dialog
-        
         // Creates a new project on backend with a specific id
         // Creates a new project on frontend with a specific id
         // Add event listener inside project's add task button to run newTask() with new project's id
@@ -312,6 +316,7 @@ class todoController {
         // Creates a new task with a specific id inside a project in frontend
     }
 }
+/*
  */
 
 export { project, task, todoView, todoController };
