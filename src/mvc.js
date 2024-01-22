@@ -20,12 +20,25 @@ class projectContainer {
     }
 
     selectProject(givenProjectID) {
-        // Loop over all of the project's tasks
+        // Loop over all of the projects
         for (const project of this.projects) {
             // If project id is equal to the project id
             if (project.id == givenProjectID) {
                 // Return the current project
                 return project;
+            }
+        }
+    }
+
+    selectTask(givenTaskID) {
+        let givenTask = false;
+        // Loop over all of the projects
+        for (const project of this.projects) {
+            // Run select task inside current project and store it in a variable
+            givenTask = project.selectTask(givenTaskID);
+            // Keep doing this until we get our task
+            if (givenTask != false) {
+                return givenTask;
             }
         }
     }
@@ -52,6 +65,19 @@ class project {
             }
         }
     }
+
+    selectTask(givenTaskID) {
+        // Loop over all of the project's tasks
+        for (const task of this.tasks) {
+            // If task id is equal to the task id we want to select
+            if (task.id == givenTaskID) {
+                // Return current task
+                return task;
+            }
+        }
+        // If task is not found, return false
+        return false;
+    }
 }
 
 class task {
@@ -76,6 +102,7 @@ class todoView {
         this.body = document.querySelector("body");
         this.#createProjectDialog();
         this.#createTaskDialog();
+        this.#createEditTaskDialog();
         this.#createNav();
         this.#createMain();
         this.main = document.querySelector("main"); // Will be used when creating new projects/tasks
@@ -210,6 +237,101 @@ class todoView {
         this.body.appendChild(newDialog);
     }
 
+    #createEditTaskDialog() {
+        const newDialog = document.createElement("dialog");
+        newDialog.setAttribute("class", "editTaskDialog");
+
+        const newForm = document.createElement("form");
+        newForm.setAttribute("class", "editTaskForm");
+
+        // Create title label & input
+        const titleLabel = document.createElement("label");
+        titleLabel.textContent = "Title";
+
+        const titleInput = document.createElement("input");
+        titleInput.setAttribute("type", "text");
+        titleInput.setAttribute("id", "editTaskTitle");
+
+        titleLabel.appendChild(titleInput);
+
+        // Create description label & input
+        const descriptionLabel = document.createElement("label");
+        descriptionLabel.textContent = "Description";
+
+        const descriptionInput = document.createElement("input");
+        descriptionInput.setAttribute("type", "text");
+        descriptionInput.setAttribute("id", "editTaskDescription");
+
+        descriptionLabel.appendChild(descriptionInput);
+
+        // Create due date label & input
+        const dateLabel = document.createElement("label");
+        dateLabel.textContent = "Due Date";
+
+        const dateInput = document.createElement("input");
+        dateInput.setAttribute("type", "date");
+        dateInput.setAttribute("id", "editTaskDate");
+
+        dateLabel.appendChild(dateInput);
+
+        // Create priority label, select, & options
+        const priorityLabel = document.createElement("label");
+        priorityLabel.textContent = "Priority";
+
+        const prioritySelect = document.createElement("select");
+        prioritySelect.setAttribute("class", "prioritySelect");
+        prioritySelect.setAttribute("id", "editTaskPriority");
+
+        const priorityOptionOne = document.createElement("option");
+        priorityOptionOne.textContent = "!";
+        priorityOptionOne.setAttribute("value", "!");
+
+        const priorityOptionTwo = document.createElement("option");
+        priorityOptionTwo.textContent = "!!";
+        priorityOptionTwo.setAttribute("value", "!!");
+
+        const priorityOptionThree = document.createElement("option");
+        priorityOptionThree.textContent = "!!!";
+        priorityOptionThree.setAttribute("value", "!!!");
+
+        // Append our three options to our select element
+        prioritySelect.appendChild(priorityOptionOne);
+        prioritySelect.appendChild(priorityOptionTwo);
+        prioritySelect.appendChild(priorityOptionThree);
+
+        priorityLabel.appendChild(prioritySelect);
+
+        // Create completed label & input
+        const completedLabel = document.createElement("label");
+        completedLabel.textContent = "Completed?";
+
+        const completedInput = document.createElement("input");
+        completedInput.setAttribute("type", "checkbox");
+        completedInput.setAttribute("id", "editTaskStatus");
+
+        completedLabel.appendChild(completedInput);
+
+        // Create submit button
+        const submitButton = document.createElement("button");
+        submitButton.textContent = "Submit";
+        submitButton.setAttribute("type", "button");
+        submitButton.setAttribute("class", "editTaskSubmitButton");
+
+        // Append title label, description label, due date label, priority label, completed label & submit button to newForm
+        newForm.appendChild(titleLabel);
+        newForm.appendChild(descriptionLabel);
+        newForm.appendChild(dateLabel);
+        newForm.appendChild(priorityLabel);
+        newForm.appendChild(completedLabel);
+        newForm.appendChild(submitButton);
+
+        // Append our form to our dialog
+        newDialog.appendChild(newForm);
+
+        // Append our dialog to the body
+        this.body.appendChild(newDialog);
+    }
+
     #createNav() {
         const newNav = document.createElement("nav");
 
@@ -270,7 +392,7 @@ class todoView {
     createTask(projectID, givenTask) {
         const tasksContainer = document.getElementById(`tasksContainer${projectID}`);
         const newTask = document.createElement("div");
-        newTask.setAttribute("id", `${givenTask.id}`);
+        newTask.setAttribute("id", `task${givenTask.id}`);
         newTask.setAttribute("class", "task");
 
         // Create task title
@@ -285,8 +407,58 @@ class todoView {
         newTask.appendChild(newTaskTitle);
         newTask.appendChild(newTaskDueDate);
 
+        // When user clicks task open up the task in detail
+        newTask.addEventListener("click", () => {
+            this.showTask(givenTask);
+        });
+
         // Append new tasks to respective tasks container
         tasksContainer.appendChild(newTask);
+    }
+
+    editTask(givenTask) {
+        const editTask = document.getElementById(`task${givenTask.id}`);
+
+        // Clear html in current task
+        editTask.innerHTML = "";
+
+        // Create task title
+        const newTaskTitle = document.createElement("h1");
+        newTaskTitle.textContent = `${givenTask.title}`;
+
+        // Create task due date
+        const newTaskDueDate = document.createElement("h1");
+        newTaskDueDate.textContent = `${givenTask.dueDate}`;
+
+        // Append title and due date to our edit task div
+        editTask.appendChild(newTaskTitle);
+        editTask.appendChild(newTaskDueDate);
+    }
+
+    showTask(givenTask) {
+        // Grab details for the task
+        const taskTitle = givenTask.title;
+        const taskDescription = givenTask.description;
+        const taskDate = givenTask.dueDate;
+        const taskPriority = givenTask.priority;
+        const taskStatus = givenTask.status;
+
+        // Grab input elements where we will store the current task details
+        const taskTitleInput = document.getElementById("editTaskTitle");
+        const taskDescriptionInput = document.getElementById("editTaskDescription");
+        const taskDateInput = document.getElementById("editTaskDate");
+        const taskPriorityInput = document.getElementById("editTaskPriority");
+        const taskStatusInput = document.getElementById("editTaskStatus");
+
+        // Set the value at each input to our current task
+        taskTitleInput.value = taskTitle;
+        taskDescriptionInput.value = taskDescription;
+        taskDateInput.value = taskDate;
+        taskPriorityInput.value = taskPriority;
+        taskStatusInput.value = taskStatus;
+
+        // Open up the task dialog
+        this.showEditTaskDialog(givenTask.id);
     }
 
     showProjectDialog() {
@@ -314,6 +486,21 @@ class todoView {
         const taskForm = document.querySelector(".taskForm");
         taskDialog.close();
         taskForm.reset();
+    }
+
+    showEditTaskDialog(givenTaskID) {
+        // Set the edit task submit button id to a given task id
+        const editTaskSubmitButton = document.querySelector(".editTaskSubmitButton");
+        editTaskSubmitButton.setAttribute("id", givenTaskID);
+        const editTaskDialog = document.querySelector(".editTaskDialog");
+        editTaskDialog.showModal();
+    }
+
+    resetEditTaskDialog() {
+        const editTaskDialog = document.querySelector(".editTaskDialog");
+        const editTaskForm = document.querySelector(".editTaskForm");
+        editTaskDialog.close();
+        editTaskForm.reset();
     }
 }
 
@@ -343,6 +530,12 @@ class todoController {
         submitTaskButton.addEventListener("click", () => {
             this.newTask(submitTaskButton.id);
             this.view.resetTaskDialog();
+        });
+
+        const submitEditTaskButton = document.querySelector(".editTaskSubmitButton");
+        submitEditTaskButton.addEventListener("click", () => {
+            this.editTask(submitEditTaskButton.id);
+            this.view.resetEditTaskDialog();
         });
     }
 
@@ -379,10 +572,27 @@ class todoController {
         // Increment ID counter
         this.elementCounter += 1;
     }
+
+    editTask(givenTaskID) {
+        // Grab user input for the new task
+        const taskTitle = document.getElementById("editTaskTitle").value;
+        const taskDescription = document.getElementById("editTaskDescription").value;
+        const taskDate = document.getElementById("editTaskDate").value;
+        const taskPriority = document.getElementById("editTaskPriority").value;
+        const taskStatus = document.getElementById("editTaskStatus").value;
+        // Select the current task
+        const givenTask = this.projects.selectTask(givenTaskID);
+        // Set task properties to user's inputs
+        givenTask.title = taskTitle;
+        givenTask.description = taskDescription;
+        givenTask.dueDate = taskDate;
+        givenTask.priority = taskPriority;
+        givenTask.status = taskStatus;
+        // Run edit task in viewer
+        this.view.editTask(givenTask);
+    }
 }
-/*
- */
 
 export { todoView, todoController };
 
-// TODO: Add specific ID's to all our form inputs, then fill out the rest of the pseudocode inside the controller
+// TODO: When a task is clicked, open up our task dialog with the clicked task's details, and when an input is changed, change the task detail on the backend/frontend
