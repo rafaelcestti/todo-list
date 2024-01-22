@@ -96,13 +96,13 @@ class project {
 }
 
 class task {
-    constructor(id, title, description, dueDate, priority) {
+    constructor(id, title, description, dueDate, priority, status) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
         this.priority = priority;
-        this.status = false;
+        this.status = status;
     }
 
     changeStatus() {
@@ -477,7 +477,7 @@ class todoView {
         taskDescriptionInput.value = taskDescription;
         taskDateInput.value = taskDate;
         taskPriorityInput.value = taskPriority;
-        taskStatusInput.value = taskStatus;
+        taskStatusInput.checked = taskStatus;
 
         // Open up the task dialog
         this.showEditTaskDialog(givenTask.id);
@@ -608,7 +608,7 @@ class todoController {
                     document.getElementById("taskDescription").value = task.description;
                     document.getElementById("taskDate").value = task.dueDate;
                     document.getElementById("taskPriority").value = task.priority;
-                    document.getElementById("taskStatus").value = task.status;
+                    document.getElementById("taskStatus").checked = task.status;
                     // Run new task with our project ID
                     this.#newTask(currentProjectID);
                     // Reset task dialog
@@ -642,9 +642,10 @@ class todoController {
         const taskDescription = document.getElementById("taskDescription").value;
         const taskDate = document.getElementById("taskDate").value;
         const taskPriority = document.getElementById("taskPriority").value;
-        const taskStatus = document.getElementById("taskStatus").value;
+        const taskStatus = document.getElementById("taskStatus").checked;
+
         // Creates a new task
-        const newTask = new task(this.elementCounter, taskTitle, taskDescription, taskDate, taskPriority);
+        const newTask = new task(this.elementCounter, taskTitle, taskDescription, taskDate, taskPriority, taskStatus);
         // Add our new task to the project given
         const givenProject = this.projects.selectProject(givenProjectID);
         givenProject.addTask(newTask);
@@ -662,7 +663,8 @@ class todoController {
         const taskDescription = document.getElementById("editTaskDescription").value;
         const taskDate = document.getElementById("editTaskDate").value;
         const taskPriority = document.getElementById("editTaskPriority").value;
-        const taskStatus = document.getElementById("editTaskStatus").value;
+        const taskStatus = document.getElementById("editTaskStatus").checked;
+
         // Select the current task
         const givenTask = this.projects.selectTask(givenTaskID);
         // Set task properties to user's inputs
