@@ -107,3 +107,7 @@ form > label {
     display: grid;
     grid-template-columns: 1fr 1fr;
 }
+
+.deleteTaskButton {
+    align-self: flex-end;
+}
