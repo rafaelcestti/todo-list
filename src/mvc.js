@@ -1,4 +1,36 @@
 // Models
+class projectContainer {
+    constructor() {
+        this.projects = [];
+    }
+
+    addProject(givenProject) {
+        this.projects.push(givenProject);
+    }
+
+    removeProject(givenProjectID) {
+        // Loop over all of the project's tasks
+        for (const [project, index] of this.projects.entries()) {
+            // If project id is equal to the project id
+            if (project.id == givenProjectID) {
+                // Delete task at current index
+                this.tasks.splice(index, 1);
+            }
+        }
+    }
+
+    selectProject(givenProjectID) {
+        // Loop over all of the project's tasks
+        for (const project of this.projects) {
+            // If project id is equal to the project id
+            if (project.id == givenProjectID) {
+                // Return the current project
+                return project;
+            }
+        }
+    }
+}
+
 class project {
     constructor(id, title) {
         this.id = id;
@@ -7,7 +39,7 @@ class project {
     }
 
     addTask(givenTask) {
-        this.tasks.push(newTask);
+        this.tasks.push(givenTask);
     }
 
     removeTask(givenTaskID) {
@@ -161,7 +193,7 @@ class todoView {
         const submitButton = document.createElement("button");
         submitButton.textContent = "Submit";
         submitButton.setAttribute("type", "button");
-        submitButton.setAttribute("class", "projectSubmitButton");
+        submitButton.setAttribute("class", "taskSubmitButton");
 
         // Append title label, description label, due date label, priority label, completed label & submit button to newForm
         newForm.appendChild(titleLabel);
@@ -269,7 +301,10 @@ class todoView {
         projectForm.reset();
     }
 
-    showTaskDialog() {
+    showTaskDialog(givenProjectID) {
+        // Set the task submit button id to a given project id
+        const taskSubmitButton = document.querySelector(".taskSubmitButton");
+        taskSubmitButton.setAttribute("id", givenProjectID);
         const taskDialog = document.querySelector(".taskDialog");
         taskDialog.showModal();
     }
@@ -286,7 +321,7 @@ class todoView {
 class todoController {
     constructor(view) {
         this.elementCounter = 0; // Project/Task ID counter
-        this.projects = [];
+        this.projects = new projectContainer();
         this.view = view;
         this.projectEventListeners();
     }
@@ -303,6 +338,12 @@ class todoController {
             this.newProject();
             this.view.resetProjectDialog();
         });
+
+        const submitTaskButton = document.querySelector(".taskSubmitButton");
+        submitTaskButton.addEventListener("click", () => {
+            this.newTask(submitTaskButton.id);
+            this.view.resetTaskDialog();
+        });
     }
 
     newProject() {
@@ -310,20 +351,33 @@ class todoController {
         const projectTitle = document.getElementById("projectTitle").value;
         // Creates a new project on backend with a specific id
         const newProject = new project(this.elementCounter, projectTitle);
-        // Add project to our projects array
-        this.projects.push(newProject);
+        // Add project to our projects element
+        this.projects.addProject(newProject);
         // Creates a new project on frontend with a specific id
         this.view.createProject(newProject);
-        // Add event listener inside project's add task button to run newTask() with new project's id
-        const addTaskToProject = document.getElementById(`addTaskButton${newProject.id}`);
-        addTaskToProject.addEventListener("click", () => newTask(newProject.id));
+        // Add event listener inside project's add task button to show the task dialog
+        const addTaskButton = document.getElementById(`addTaskButton${newProject.id}`);
+        addTaskButton.addEventListener("click", () => this.view.showTaskDialog(newProject.id));
         // Increment ID counter
         this.elementCounter += 1;
     }
 
-    newTask() {
-        // Creates a new task with a specific id inside a project in backend
+    newTask(givenProjectID) {
+        // Grab user input for the new task
+        const taskTitle = document.getElementById("taskTitle").value;
+        const taskDescription = document.getElementById("taskDescription").value;
+        const taskDate = document.getElementById("taskDate").value;
+        const taskPriority = document.getElementById("taskPriority").value;
+        const taskStatus = document.getElementById("taskStatus").value;
+        // Creates a new task
+        const newTask = new task(this.elementCounter, taskTitle, taskDescription, taskDate, taskPriority);
+        // Add our new task to the project given
+        const givenProject = this.projects.selectProject(givenProjectID);
+        givenProject.addTask(newTask);
         // Creates a new task with a specific id inside a project in frontend
+        this.view.createTask(givenProjectID, newTask);
+        // Increment ID counter
+        this.elementCounter += 1;
     }
 }
 /*
