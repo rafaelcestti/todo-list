@@ -10,7 +10,7 @@ class projectContainer {
 
     removeProject(givenProjectID) {
         // Loop over all of the project's tasks
-        for (const [project, index] of this.projects.entries()) {
+        for (const [index, project] of this.projects.entries()) {
             // If project id is equal to the project id
             if (project.id == givenProjectID) {
                 // Delete task at current index
@@ -42,6 +42,19 @@ class projectContainer {
             }
         }
     }
+
+    deleteTask(givenTaskID) {
+        let givenTask = false;
+        // Loop over all of the projects
+        for (const project of this.projects) {
+            // Run select task inside current project and store it in a variable
+            givenTask = project.removeTask(givenTaskID);
+            // Keep doing this until we delete our task
+            if (givenTask != false) {
+                return true;
+            }
+        }
+    }
 }
 
 class project {
@@ -57,13 +70,15 @@ class project {
 
     removeTask(givenTaskID) {
         // Loop over all of the project's tasks
-        for (const [task, index] of this.tasks.entries()) {
+        for (const [index, task] of this.tasks.entries()) {
             // If task id is equal to the task id we want to delete
             if (task.id == givenTaskID) {
                 // Delete task at current index
                 this.tasks.splice(index, 1);
+                return true;
             }
         }
+        return false;
     }
 
     selectTask(givenTaskID) {
@@ -244,6 +259,12 @@ class todoView {
         const newForm = document.createElement("form");
         newForm.setAttribute("class", "editTaskForm");
 
+        // Create X to delete current task
+        const deleteButton = document.createElement("button");
+        deleteButton.textContent = "X";
+        deleteButton.setAttribute("class", "deleteTaskButton");
+        deleteButton.setAttribute("type", "button");
+
         // Create title label & input
         const titleLabel = document.createElement("label");
         titleLabel.textContent = "Title";
@@ -318,6 +339,7 @@ class todoView {
         submitButton.setAttribute("class", "editTaskSubmitButton");
 
         // Append title label, description label, due date label, priority label, completed label & submit button to newForm
+        newForm.append(deleteButton);
         newForm.appendChild(titleLabel);
         newForm.appendChild(descriptionLabel);
         newForm.appendChild(dateLabel);
@@ -461,6 +483,12 @@ class todoView {
         this.showEditTaskDialog(givenTask.id);
     }
 
+    deleteTask(givenTaskID) {
+        // Grab the div for the corresponding task
+        const deleteTaskDiv = document.getElementById(`task${givenTaskID}`);
+        deleteTaskDiv.remove();
+    }
+
     showProjectDialog() {
         const projectDialog = document.querySelector(".projectDialog");
         projectDialog.showModal();
@@ -492,6 +520,9 @@ class todoView {
         // Set the edit task submit button id to a given task id
         const editTaskSubmitButton = document.querySelector(".editTaskSubmitButton");
         editTaskSubmitButton.setAttribute("id", givenTaskID);
+        // Set the delete task button id to a given task id
+        const deleteTaskButton = document.querySelector(".deleteTaskButton");
+        deleteTaskButton.setAttribute("id", givenTaskID);
         const editTaskDialog = document.querySelector(".editTaskDialog");
         editTaskDialog.showModal();
     }
@@ -535,6 +566,12 @@ class todoController {
         const submitEditTaskButton = document.querySelector(".editTaskSubmitButton");
         submitEditTaskButton.addEventListener("click", () => {
             this.editTask(submitEditTaskButton.id);
+            this.view.resetEditTaskDialog();
+        });
+
+        const deleteTaskButton = document.querySelector(".deleteTaskButton");
+        deleteTaskButton.addEventListener("click", () => {
+            this.deleteTask(deleteTaskButton.id);
             this.view.resetEditTaskDialog();
         });
     }
@@ -590,6 +627,13 @@ class todoController {
         givenTask.status = taskStatus;
         // Run edit task in viewer
         this.view.editTask(givenTask);
+    }
+
+    deleteTask(givenTaskID) {
+        // Remove task with given ID in the backend
+        this.projects.deleteTask(givenTaskID);
+        // Remove task with given ID in the frontend
+        this.view.deleteTask(givenTaskID);
     }
 }
 
