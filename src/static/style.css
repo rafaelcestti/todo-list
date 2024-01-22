@@ -89,6 +89,9 @@ main {
     word-wrap: break-word;
     font-size: 1.25rem;
     grid-template-columns: 1fr 1fr;
+}
+
+.task > h1:nth-child(2) {
     text-align: center;
 }
 
