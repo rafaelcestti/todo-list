@@ -1,6 +1,6 @@
 import "./static/reset.css";
 import "./static/style.css";
+import { todoView, todoController } from "./mvc.js";
 
-/* TODO:
-    - Follow MVC design principle, https://chat.openai.com/share/eb0de10a-ac8f-43f9-9754-93f88ee2e334
-*/
+let viewTest = new todoView();
+let controllerTest = new todoController(viewTest);
