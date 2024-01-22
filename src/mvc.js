@@ -638,5 +638,3 @@ class todoController {
 }
 
 export { todoView, todoController };
-
-// TODO: When a task is clicked, open up our task dialog with the clicked task's details, and when an input is changed, change the task detail on the backend/frontend
