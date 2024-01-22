@@ -261,7 +261,7 @@ class todoView {
 
         // Create X to delete current task
         const deleteButton = document.createElement("button");
-        deleteButton.textContent = "X";
+        deleteButton.textContent = "Delete Task";
         deleteButton.setAttribute("class", "deleteTaskButton");
         deleteButton.setAttribute("type", "button");
 
