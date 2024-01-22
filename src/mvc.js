@@ -541,10 +541,11 @@ class todoController {
         this.elementCounter = 0; // Project/Task ID counter
         this.projects = new projectContainer();
         this.view = view;
-        this.projectEventListeners();
+        this.#projectEventListeners();
+        this.#loadLocalStorage();
     }
 
-    projectEventListeners() {
+    #projectEventListeners() {
         // Sets event listener for new project button
         const newProjectButton = document.querySelector(".newProjectButton");
         newProjectButton.addEventListener("click", () => {
@@ -553,30 +554,61 @@ class todoController {
 
         const submitProjectButton = document.querySelector(".projectSubmitButton");
         submitProjectButton.addEventListener("click", () => {
-            this.newProject();
+            this.#newProject();
             this.view.resetProjectDialog();
         });
 
         const submitTaskButton = document.querySelector(".taskSubmitButton");
         submitTaskButton.addEventListener("click", () => {
-            this.newTask(submitTaskButton.id);
+            this.#newTask(submitTaskButton.id);
             this.view.resetTaskDialog();
         });
 
         const submitEditTaskButton = document.querySelector(".editTaskSubmitButton");
         submitEditTaskButton.addEventListener("click", () => {
-            this.editTask(submitEditTaskButton.id);
+            this.#editTask(submitEditTaskButton.id);
             this.view.resetEditTaskDialog();
         });
 
         const deleteTaskButton = document.querySelector(".deleteTaskButton");
         deleteTaskButton.addEventListener("click", () => {
-            this.deleteTask(deleteTaskButton.id);
+            this.#deleteTask(deleteTaskButton.id);
             this.view.resetEditTaskDialog();
         });
     }
 
-    newProject() {
+    #loadLocalStorage() {
+        // Retrieve the projects array stored in local storage
+        const localProjects = JSON.parse(localStorage.getItem("projects"));
+
+        // Create new project for each of our local projects
+        for (const project of localProjects.projects) {
+            // Set title in project dialog
+            document.getElementById("projectTitle").value = project.title;
+            // Create new project
+            this.#newProject();
+            // Reset project idalog
+            this.view.resetProjectDialog();
+            // Store our project ID
+            let currentProjectID = this.elementCounter - 1; // element counter - 1 because we incremented it when we created our project
+
+            // Create new task for each task inside our local project
+            for (const task of project.tasks) {
+                // Set data for each input in task inputs
+                document.getElementById("taskTitle").value = task.title;
+                document.getElementById("taskDescription").value = task.description;
+                document.getElementById("taskDate").value = task.dueDate;
+                document.getElementById("taskPriority").value = task.priority;
+                document.getElementById("taskStatus").value = task.status;
+                // Run new task with our project ID
+                this.#newTask(currentProjectID);
+                // Reset task dialog
+                this.view.resetTaskDialog();
+            }
+        }
+    }
+
+    #newProject() {
         // Grab title from project dialog
         const projectTitle = document.getElementById("projectTitle").value;
         // Creates a new project on backend with a specific id
@@ -590,9 +622,11 @@ class todoController {
         addTaskButton.addEventListener("click", () => this.view.showTaskDialog(newProject.id));
         // Increment ID counter
         this.elementCounter += 1;
+        // Update our projects array in local storage
+        localStorage.setItem("projects", JSON.stringify(this.projects));
     }
 
-    newTask(givenProjectID) {
+    #newTask(givenProjectID) {
         // Grab user input for the new task
         const taskTitle = document.getElementById("taskTitle").value;
         const taskDescription = document.getElementById("taskDescription").value;
@@ -608,9 +642,11 @@ class todoController {
         this.view.createTask(givenProjectID, newTask);
         // Increment ID counter
         this.elementCounter += 1;
+        // Update our projects array in local storage
+        localStorage.setItem("projects", JSON.stringify(this.projects));
     }
 
-    editTask(givenTaskID) {
+    #editTask(givenTaskID) {
         // Grab user input for the new task
         const taskTitle = document.getElementById("editTaskTitle").value;
         const taskDescription = document.getElementById("editTaskDescription").value;
@@ -627,13 +663,17 @@ class todoController {
         givenTask.status = taskStatus;
         // Run edit task in viewer
         this.view.editTask(givenTask);
+        // Update our projects array in local storage
+        localStorage.setItem("projects", JSON.stringify(this.projects));
     }
 
-    deleteTask(givenTaskID) {
+    #deleteTask(givenTaskID) {
         // Remove task with given ID in the backend
         this.projects.deleteTask(givenTaskID);
         // Remove task with given ID in the frontend
         this.view.deleteTask(givenTaskID);
+        // Update our projects array in local storage
+        localStorage.setItem("projects", JSON.stringify(this.projects));
     }
 }
 
