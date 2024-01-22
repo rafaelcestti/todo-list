@@ -542,7 +542,7 @@ class todoController {
         this.projects = new projectContainer();
         this.view = view;
         this.#projectEventListeners();
-        this.#loadLocalStorage();
+        this.#initialLoad();
     }
 
     #projectEventListeners() {
@@ -577,33 +577,43 @@ class todoController {
         });
     }
 
-    #loadLocalStorage() {
+    #initialLoad() {
         // Retrieve the projects array stored in local storage
         const localProjects = JSON.parse(localStorage.getItem("projects"));
 
-        // Create new project for each of our local projects
-        for (const project of localProjects.projects) {
+        // If there's nothing in local storage, simply create a default project
+        if (localProjects == null) {
             // Set title in project dialog
-            document.getElementById("projectTitle").value = project.title;
+            document.getElementById("projectTitle").value = "Default Project";
             // Create new project
             this.#newProject();
             // Reset project idalog
             this.view.resetProjectDialog();
-            // Store our project ID
-            let currentProjectID = this.elementCounter - 1; // element counter - 1 because we incremented it when we created our project
+        } else {
+            // Create new project for each of our local projects
+            for (const project of localProjects.projects) {
+                // Set title in project dialog
+                document.getElementById("projectTitle").value = project.title;
+                // Create new project
+                this.#newProject();
+                // Reset project idalog
+                this.view.resetProjectDialog();
+                // Store our project ID
+                let currentProjectID = this.elementCounter - 1; // element counter - 1 because we incremented it when we created our project
 
-            // Create new task for each task inside our local project
-            for (const task of project.tasks) {
-                // Set data for each input in task inputs
-                document.getElementById("taskTitle").value = task.title;
-                document.getElementById("taskDescription").value = task.description;
-                document.getElementById("taskDate").value = task.dueDate;
-                document.getElementById("taskPriority").value = task.priority;
-                document.getElementById("taskStatus").value = task.status;
-                // Run new task with our project ID
-                this.#newTask(currentProjectID);
-                // Reset task dialog
-                this.view.resetTaskDialog();
+                // Create new task for each task inside our local project
+                for (const task of project.tasks) {
+                    // Set data for each input in task inputs
+                    document.getElementById("taskTitle").value = task.title;
+                    document.getElementById("taskDescription").value = task.description;
+                    document.getElementById("taskDate").value = task.dueDate;
+                    document.getElementById("taskPriority").value = task.priority;
+                    document.getElementById("taskStatus").value = task.status;
+                    // Run new task with our project ID
+                    this.#newTask(currentProjectID);
+                    // Reset task dialog
+                    this.view.resetTaskDialog();
+                }
             }
         }
     }
